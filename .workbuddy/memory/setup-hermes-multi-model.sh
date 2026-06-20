@@ -111,10 +111,17 @@ _config_version: 30
 
 HEADER
     
-    # 替换 API Key 占位符
-    sed -i '' "s/PLACEHOLDER_DEEPSEEK_KEY/${DEEPSEEK_KEY}/g" "$CONFIG_FILE"
-    sed -i '' "s/PLACEHOLDER_AGNES_KEY/${AGNES_KEY}/g" "$CONFIG_FILE"
-    sed -i '' "s/PLACEHOLDER_KIMI_KEY/${KIMI_KEY}/g" "$CONFIG_FILE"
+    # 替换 API Key 占位符（转义 sed 特殊字符）
+    escape_sed() {
+        printf '%s\n' "$1" | sed 's/[[\.*^$()+?{|\/\-]/\\&/g'
+    }
+    ESC_DEEPSEEK=$(escape_sed "$DEEPSEEK_KEY")
+    ESC_AGNES=$(escape_sed "$AGNES_KEY")
+    ESC_KIMI=$(escape_sed "$KIMI_KEY")
+    
+    sed -i '' "s/PLACEHOLDER_DEEPSEEK_KEY/${ESC_DEEPSEEK}/g" "$CONFIG_FILE"
+    sed -i '' "s/PLACEHOLDER_AGNES_KEY/${ESC_AGNES}/g" "$CONFIG_FILE"
+    sed -i '' "s/PLACEHOLDER_KIMI_KEY/${ESC_KIMI}/g" "$CONFIG_FILE"
     
     echo "  ✅ 已创建 config.yaml"
 else
@@ -166,7 +173,6 @@ model:
   default: agnes-2.0-flash
   provider: custom
   base_url: https://apihub.agnes-ai.com/v1
-  api_key: ${AGNES_KEY:-}
 
 fallback_model:
   provider: deepseek
@@ -209,7 +215,6 @@ model:
   default: agnes-2.0-flash
   provider: custom
   base_url: https://apihub.agnes-ai.com/v1
-  api_key: ${AGNES_KEY:-}
 
 fallback_model:
   provider: deepseek
