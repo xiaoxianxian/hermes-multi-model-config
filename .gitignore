@@ -1,0 +1,32 @@
+# API Keys and sensitive files
+.config.yaml
+.env
+.auth.json
+*key*
+*secret*
+
+# Backup files
+*.bak
+*.bak.*
+*.backup_*
+config.yaml.bak*
+*.tmp
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Hermes internal
+.cache/
+.history/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
